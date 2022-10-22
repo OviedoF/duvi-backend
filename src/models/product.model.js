@@ -27,6 +27,10 @@ const productSchema = new Schema({
         required: true
     },
     galeryImages: Array,
+    comments: {
+        ref: "Comment",
+        type: Schema.Types.ObjectId
+    }
 
 }, {
     timestamps: true

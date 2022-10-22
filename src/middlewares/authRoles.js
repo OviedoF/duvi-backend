@@ -3,6 +3,7 @@ const path = require('path');
 require('dotenv').config();
 const User = require(path.join(__dirname, '..', 'models', 'user.model'));
 const Role = require(path.join(__dirname, '..', 'models', 'role.model'));
+const deleteImage = require(path.join(__dirname, '..', 'libs', 'dirLibrary'))
 
 const verifyToken = async (req, res, next) => {
     try {
@@ -25,7 +26,7 @@ const verifyToken = async (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
     try {
-        const user = await User.findById(req.userId);
+        const user = await User.findById(req.headers.userid);
         const roles = await Role.find({_id: {$in: user.roles}});
 
         for (let i = 0; i < roles.length; i++) {
@@ -35,8 +36,13 @@ const isAdmin = async (req, res, next) => {
             }
         }
 
-        return res.status(403).json({message: "Require Admin Role"})
+        return res.status(403).json({message: "Se requiere rol de administrador"})
     } catch (error) {
+        if(req.files[0]){
+            const {filename} = req.files[0];
+            const dirname = path.join(__dirname, '..', 'public', 'images', filename);
+            deleteImage(dirname);
+        }
         return res.status(500).send(error);
     }
 }

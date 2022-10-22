@@ -2,15 +2,16 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 const categoriesControllers = require(path.join(__dirname, '..', 'controllers', 'categories.controller'));
+const { isAdmin } = require(path.join(__dirname, '..', 'middlewares', 'authRoles'))
 
 router.get('/', categoriesControllers.getCategories);
 
 router.get('/:id', categoriesControllers.getCategoryById);
 
-router.post('/createCategory', categoriesControllers.createCategory);
+router.post('/', isAdmin, categoriesControllers.createCategory);
 
-router.put('/update/:id', categoriesControllers.updateCategory);
+router.put('/update/:id', isAdmin, categoriesControllers.updateCategory);
 
-router.delete('/delete/:id', categoriesControllers.deleteCategory);
+router.delete('/delete/:id', isAdmin, categoriesControllers.deleteCategory);
 
 module.exports = router;

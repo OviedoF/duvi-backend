@@ -35,12 +35,18 @@ const duviSchema = new Schema({
         tiktok: String,
         twitter: String
     },  
-    contact: {
-        cellPhone: String,
-        email: String
-    },
+    cellPhone: String,
+    email: String,
     products: [{
         ref: "Product",
+        type: Schema.Types.ObjectId
+    }],
+    comments: [{
+        ref: "Comment",
+        type: Schema.Types.ObjectId
+    }],
+    posts: [{
+        ref: "Post",
         type: Schema.Types.ObjectId
     }]
 });

@@ -10,13 +10,13 @@ authController.signUp = async (req, res) => {
     try {
         const { filename } = req.files[0];
         const { password } = req.body;
-        const userRole = await Role.findOne({name: "user"});
+        const userRole = await Role.findOne( { name: "user" } );
 
         const newUser = new User({
             ...req.body,
             userImage: `${process.env.ROOT_URL}/images/${filename}`,
             password: await User.encryptPassword(password),
-            roles: [userRole._id]
+            roles: [ userRole._id ]
         });
 
         const savedUser = await newUser.save();
@@ -56,7 +56,7 @@ authController.signIn = async (req, res) => {
 
         const matchPassword = await User.comparePassword(password, userFound.password);
 
-        if(!matchPassword) return res.status(401).json({
+        if(!matchPassword) return res.status(404).json({
             token: null,
             message: "Contraseña incorrecta, verifique por favor."
         });
