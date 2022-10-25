@@ -88,12 +88,14 @@ authController.identifyUserJSW = async (req, res) => {
 
         const userRoles = rolesExist.map(el => el.name);
 
-        user.roles = undefined;
-
-        res.status(200).send({
-            user,
+        const userToSend = {
+            ...user._doc,
             roles: userRoles
-        });
+        }
+
+        console.log(userToSend);
+
+        res.status(200).send(userToSend);
     } catch (error) {
         console.log(error);
         res.status(500).send(error);

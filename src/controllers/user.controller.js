@@ -2,14 +2,17 @@ const path = require('path');
 require('dotenv').config();
 const User = require(path.join(__dirname, '..', 'models', 'user.model'));
 const Role = require(path.join(__dirname, '..', 'models', 'role.model'));
-const deleteImage = require(path.join(__dirname, '..', 'lobs', 'dirLibrary'));
+const deleteImage = require(path.join(__dirname, '..', 'libs', 'dirLibrary'));
 
 const userController = {};
 
 userController.getUserById = async (req, res) => {
     try {
         const {id} = req.params;
-        const userFinded = await User.findById(id);
+        const userFinded = await User.findById(id, {
+            password: false,
+            roles: false
+        });
 
         if(!userFinded) return res.status(404).send('No se ha podido encontrar el usuario.');
 
