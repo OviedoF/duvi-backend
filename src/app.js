@@ -31,5 +31,6 @@ app.use('/api/category', require(path.join(__dirname, 'routes', 'category.routes
 app.use('/api/subcategory', require(path.join(__dirname, 'routes', 'subCategory.routes.js')));
 app.use('/api/duvi', require(path.join(__dirname, 'routes', 'duvi.routes.js')));
 app.use('/api/user', require(path.join(__dirname, 'routes', 'user.routes.js')))
+app.use('/api/post', require(path.join(__dirname, 'routes', 'posts.routes.js')))
 
 module.exports = app;

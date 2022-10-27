@@ -93,8 +93,6 @@ authController.identifyUserJSW = async (req, res) => {
             roles: userRoles
         }
 
-        console.log(userToSend);
-
         res.status(200).send(userToSend);
     } catch (error) {
         console.log(error);

@@ -21,7 +21,7 @@ duviController.getDuvi = async (req, res) => {
 duviController.getDuviById = async (req, res) => {
     try {
         const {id} = req.params;
-        const duvi = await Duvi.findById(id);
+        const duvi = await Duvi.findById(id).populate(['products', 'posts']);
 
         if(!duvi) res.status(404).send("Tienda no encontrada.");
 

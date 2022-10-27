@@ -8,9 +8,8 @@ const createInitialAdmin = async () => {
         const count = await User.estimatedDocumentCount();
 
         if(count === 0){
-            const rolesId = await Role.find({}, {_id: true});
-            const arrayRolesId = rolesId.map (el => el.id.toString());
-            
+            const userRoleId = await Role.findOne({name: 'user'}, {_id: true});
+            const adminRoleId = await Role.findOne({name: 'admin'}, {_id: true});
             const admin = new User({
                 name: process.env.INITIAL_ADMIN_NAME,
                 username: process.env.INITIAL_ADMIN_USERNAME,
@@ -18,7 +17,7 @@ const createInitialAdmin = async () => {
                 email: process.env.INITIAL_ADMIN_EMAIL,
                 userId: process.env.INITIAL_ADMIN_ID,
                 password: await User.encryptPassword(process.env.INITIAL_ADMIN_PASSWORD),
-                roles: arrayRolesId,
+                roles: [userRoleId._id.toString(), adminRoleId._id.toString()],
                 userImage: "https://res.cloudinary.com/syphhy/image/upload/v1659924479/5b8626bc2bd5a65d22f2278f57e6ee75_s1bres.gif"
             });
 
