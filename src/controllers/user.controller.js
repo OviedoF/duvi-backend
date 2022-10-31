@@ -31,7 +31,8 @@ userController.updateUser = async (req, res) => {
         if(!userFinded) return res.status(404).send('No se ha podido encontrar el usuario.');
 
         if(req.files[0]){
-            const oldImageName = userFinded.userImage.split('/images/')[1];
+            const oldImageName = userFinded.userImage.split('/images/')[1] || userFinded.userImage.split('/image/upload/')[1];
+            console.log(oldImageName)
             const routeImagesFolder = path.join(__dirname, '..', 'public', 'images', oldImageName);
             deleteImage(routeImagesFolder);
 
@@ -40,22 +41,6 @@ userController.updateUser = async (req, res) => {
         }
 
         const userUpdated = await User.findByIdAndUpdate(id, req.body);
-        res.status(200).send(userUpdated);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send(error);
-    }
-}
-
-userController.changePassword = async (req, res) => {
-    try {
-        const {id} = req.params;
-        const {newPassword} = req.body;
-
-        const password = await User.encryptPassword(newPassword);
-
-        const userUpdated = await User.findByIdAndUpdate(id, { password }, {new: true});
-
         res.status(200).send(userUpdated);
     } catch (error) {
         console.log(error);

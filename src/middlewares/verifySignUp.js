@@ -12,10 +12,12 @@ verifySignUp.checkDuplicate = (check, message) => {
         });
     
         if(isDuplicate) {
-            const { filename } = req.files[0];
-            const pathImage = path.join(__dirname, '..', 'public', 'images', filename);
+            if(req.files[0]){
+                const { filename } = req.files[0];
+                const pathImage = path.join(__dirname, '..', 'public', 'images', filename);
 
-            deleteImage(pathImage);
+                deleteImage(pathImage);
+            }
 
             return res.status(400).json({
                 message,

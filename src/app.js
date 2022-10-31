@@ -30,7 +30,8 @@ app.use('/api/products', require(path.join(__dirname, 'routes', 'product.routes.
 app.use('/api/category', require(path.join(__dirname, 'routes', 'category.routes.js')));
 app.use('/api/subcategory', require(path.join(__dirname, 'routes', 'subCategory.routes.js')));
 app.use('/api/duvi', require(path.join(__dirname, 'routes', 'duvi.routes.js')));
-app.use('/api/user', require(path.join(__dirname, 'routes', 'user.routes.js')))
-app.use('/api/post', require(path.join(__dirname, 'routes', 'posts.routes.js')))
+app.use('/api/user', require(path.join(__dirname, 'routes', 'user.routes.js')));
+app.use('/api/post', require(path.join(__dirname, 'routes', 'posts.routes.js')));
+app.use('/api/change-password', require(path.join(__dirname, 'routes', 'changePassword.routes.js')));
 
-module.exports = app;
+module.exports = app; 
