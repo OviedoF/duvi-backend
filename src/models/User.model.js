@@ -7,14 +7,11 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-
     username: {
         type: String,
         required: true
     },
-
     cellphone: String,
-
     email: {
         type: String,
         required: true,
@@ -40,7 +37,22 @@ const userSchema = new Schema({
     duvi: {
         ref: 'Duvi',
         type: Schema.Types.ObjectId
-    }
+    },
+    
+    wishList: [{
+        ref: "Product",
+        type: Schema.Types.ObjectId
+    }],
+
+    shoppingCart: [{
+        ref: "Product",
+        type: Schema.Types.ObjectId
+    }],
+
+    follows: [{
+        ref: "Duvi",
+        type: Schema.Types.ObjectId
+    }]
 }, {
     timestamps: true
 });

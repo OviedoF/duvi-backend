@@ -68,7 +68,8 @@ productsControllers.createProduct = async (req, res) => {
             ...req.body,
             principalImage: `${process.env.ROOT_URL}/images/${filename}`,
             galeryImages,
-            stock: true
+            stock: true,
+            duvi: duviid
         });
 
         await newProduct.save();

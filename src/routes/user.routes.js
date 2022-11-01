@@ -28,4 +28,11 @@ router.put('/:id',
   )
 ], userController.updateUser)
 
+router.put('/:id/wishlist', userController.updateWishList);
+
+router.put('/:id/follows', userController.updateFollows);
+
+router.put('/:id/shopping-cart', userController.updateShoppingCart);
+router.get('/:id/shopping-cart', userController.getShoppingCart);
+
 module.exports = router;
