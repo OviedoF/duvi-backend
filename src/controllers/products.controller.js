@@ -41,6 +41,8 @@ productsControllers.getProductById = async(req, res) => {
         const {id} = req.params;
         const product = await Product.findById(id).populate(['category', 'subcategories']);
 
+        // await Product.updateMany({}, {stock: 4});
+
         if(!product) res.status(404).send("Producto no encontrado");
 
         res.status(200).send(product);
@@ -68,7 +70,6 @@ productsControllers.createProduct = async (req, res) => {
             ...req.body,
             principalImage: `${process.env.ROOT_URL}/images/${filename}`,
             galeryImages,
-            stock: true,
             duvi: duviid
         });
 

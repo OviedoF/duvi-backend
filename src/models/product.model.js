@@ -17,7 +17,7 @@ const productSchema = new Schema({
         ref: 'SubCategory',
         type: Schema.Types.ObjectId
     }],
-    stock: Boolean,
+    stock: Number,
     price: {
         type: Number,
         required: true
@@ -34,7 +34,9 @@ const productSchema = new Schema({
     duvi: {
         ref: "Duvi",
         type: Schema.Types.ObjectId
-    }
+    },
+
+    sizes: [String]
 }, {
     timestamps: true
 });
