@@ -32,7 +32,7 @@ MPController.getPaymentLink = async(req, res) => {
             statement_descriptor: "Gcompra", //Descripcion en Resumen de Tarjeta
             notificacion_url: `https://${process.env.ROOT_URL}/api/payments/notifications`,
             additional_info: "COMPRA"
-        }
+        };
 
         const payment = await axios.post(url, body, {
             headers: {

@@ -41,7 +41,7 @@ productsControllers.getProductById = async(req, res) => {
         const {id} = req.params;
         const product = await Product.findById(id).populate(['category', 'subcategories']);
 
-        // await Product.updateMany({}, {stock: 4});
+        // await Product.updateMany({name: 'p1'}, {stock: 8});
 
         if(!product) res.status(404).send("Producto no encontrado");
 

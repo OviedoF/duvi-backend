@@ -130,6 +130,29 @@ userController.updateShoppingCart = async (req, res) => {
     }
 }
 
+userController.getFollows = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const user = await User.findById(id, {follows: true}).populate('follows');
+        res.status(200).send(user.follows);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+};
+
+userController.getWishList = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const user = await User.findById(id, {wishList: true}).populate('wishList');
+        console.log(user.wishList);
+        res.status(200).send(user.wishList);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+};
+
 userController.getShoppingCart = async (req, res) => {
     try{
         const {id} = req.params;
