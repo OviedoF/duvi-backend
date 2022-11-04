@@ -52,7 +52,17 @@ const userSchema = new Schema({
     follows: [{
         ref: "Duvi",
         type: Schema.Types.ObjectId
-    }]
+    }],
+
+    shoppingHistory: [{
+        ref: "Purchase",
+        type: Schema.Types.ObjectId
+    }],
+
+    wallet: {
+        onProperty: Number,
+        onWait: Number
+    }
 }, {
     timestamps: true
 });

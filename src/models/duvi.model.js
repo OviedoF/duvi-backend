@@ -48,6 +48,10 @@ const duviSchema = new Schema({
     posts: [{
         ref: "Post",
         type: Schema.Types.ObjectId
+    }],
+    salesHistory: [{
+        ref: "Purchase",
+        type: Schema.Types.ObjectId
     }]
 });
 

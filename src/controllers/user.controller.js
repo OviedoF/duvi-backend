@@ -15,7 +15,10 @@ userController.getUserById = async (req, res) => {
             roles: false
         });
         
-        // await User.updateMany({}, { shoppingCart: [] });
+        // await User.updateMany({ duvi: { '$exists': true } }, { wallet: {
+        //     onProperty: 0,
+        //     onWait: 0
+        // } });
 
         if(!userFinded) return res.status(404).send('No se ha podido encontrar el usuario.');
 
@@ -104,18 +107,6 @@ userController.updateShoppingCart = async (req, res) => {
 
         const user = await User.findById(id, {shoppingCart: true});
 
-        // let shoppingCart = user.shoppingCart;
-        // let aux = {};
-
-        // shoppingCart.forEach(el => {
-        //     if(!aux[el.product]) aux[el.product] = {
-        //         product: el.product,
-        //         quantity: 0
-        //     };
-
-        //     aux[el.product].quantity++;
-        // });
-
         if(!user.shoppingCart.includes(productId)) {
             const userUpdated = await User.findByIdAndUpdate(id, { '$addToSet': { 'shoppingCart': productId } }, {new: true});
             res.status(200).send(userUpdated.shoppingCart);
@@ -187,5 +178,7 @@ userController.getShoppingCart = async (req, res) => {
     } catch(e) {
         console.log(e);
     }
-}
+};
+
+
 module.exports = userController;

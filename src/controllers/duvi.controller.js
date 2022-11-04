@@ -62,6 +62,11 @@ duviController.createDuvi = async (req, res) => {
             });
         }
 
+        await User.findByIdAndUpdate(user_id, {wallet: {
+            onProperty: 0,
+            onWait: 0
+        }});
+
         await newDuvi.save();
 
         res.status(201).send(newDuvi);
