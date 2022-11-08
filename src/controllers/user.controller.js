@@ -15,10 +15,7 @@ userController.getUserById = async (req, res) => {
             roles: false
         });
         
-        // await User.updateMany({ duvi: { '$exists': true } }, { wallet: {
-        //     onProperty: 0,
-        //     onWait: 0
-        // } });
+        // await User.updateMany({}, {shoppingHistory: []});
 
         if(!userFinded) return res.status(404).send('No se ha podido encontrar el usuario.');
 

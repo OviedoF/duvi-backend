@@ -7,9 +7,6 @@ router.post('/', PaymentsController.getPaymentLink);
 
 router.post('/success', PaymentsController.paymentSuccess);
 
-router.post('/notifications', (req, res) => {
-    console.log('notificacion recibida de MP ✌')
-    res.status(200).send('ok');
-});
+router.get('/invoice/:id', PaymentsController.getPaymentInvoice);
 
 module.exports = router;

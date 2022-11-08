@@ -5,7 +5,7 @@ const purchaseSchema = new Schema({
     type: String,
     required: true,
   },
-  paymentInvoice: {
+  invoice: {
     ref: "PaymentInvoice",
     type: Schema.Types.ObjectId
   },

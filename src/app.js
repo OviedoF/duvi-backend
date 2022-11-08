@@ -34,5 +34,6 @@ app.use('/api/user', require(path.join(__dirname, 'routes', 'user.routes.js')));
 app.use('/api/post', require(path.join(__dirname, 'routes', 'posts.routes.js')));
 app.use('/api/change-password', require(path.join(__dirname, 'routes', 'changePassword.routes.js')));
 app.use('/api/payments', require(path.join(__dirname, 'routes', 'payments.routes.js')));
+app.use('/api/history', require(path.join(__dirname, 'routes', 'history.routes.js')));
 
 module.exports = app; 

@@ -1,13 +1,11 @@
 require("dotenv").config();
 const path = require("path");
 const axios = require("axios");
-const PDF = require('pdfkit')
 const User = require(path.join(__dirname, "..", "models", "user.model"));
 const Duvi = require(path.join(__dirname, "..", "models", "duvi.model"));
 const Product = require(path.join( __dirname, "..", "models", "product.model.js"));
 const Purchase = require(path.join( __dirname, "..", "models", "purchase.model.js" ));
 const PaymentInvoice = require(path.join( __dirname, "..", "models", "paymentInvoice.model.js" ));
-const generatePdf = require(path.join( __dirname, "..", 'libs', 'generatePdf.js' ));
 
 const PaymentsController = {};
 
@@ -68,17 +66,17 @@ PaymentsController.paymentSuccess = async (req, res) => {
     - Crear nuevo documento "paymentInvoice" con la información a renderizar en el front #
     - Agregar nueva propiedad "paymentInvoice" con el documento nuevo (ref) #
     - Agregar al historial y seguimiento de vendedor y comprador #
-    - Agregar monto a wallet vendedor 
+    - Agregar monto a wallet vendedor #
     - Generar factura (en html) y guardar su enlace en el documento de la compra #
     - Crear "seguimientos" en el documento del usuario y añadir la compra (ref) # 
     - Mandar por email la confirmación y la factura 
-    - Quitar producto del carrito del comprador
-    - Quitar cantidad de stock al producto
+    - Quitar producto del carrito del comprador #
+    - Quitar cantidad de stock al producto #
   */
 
   try {
-    const { idBuyer, idSeller } = req.headers;
-    const { cart } = req.body;
+    const { idbuyer, idseller } = req.headers;
+    const { cart, totalPrice } = req.body;
     const images = cart.map((el) => el.principalImage);
 
     const products = cart.map((el) => {
@@ -86,29 +84,63 @@ PaymentsController.paymentSuccess = async (req, res) => {
         name: el.name,
         quantity: el.quantity,
         price: el.price,
-        size: sizeSelected,
+        size: el.sizeSelected,
         idProduct: el._id 
       };
     });
 
-    const newPaymentInvoice = new PaymentInvoice({seller: idSeller, buyer: idBuyer, purchase: products});
+    const newPaymentInvoice = new PaymentInvoice({seller: idseller, buyer: idbuyer, purchase: products});
 
     const newPurchase = new Purchase({
       state: "in process",
-      buyer: idBuyer,
-      seller: idSeller,
+      buyer: idbuyer,
+      seller: idseller,
       products,
       images,
+      invoice: newPaymentInvoice._id,
       PaymentInvoice: newPaymentInvoice._id
     });
 
-    await User.findByIdAndUpdate(idBuyer, { '$addToSet': { 'shoppingHistory': newPurchase._id } }, {new: true});
-    await Duvi.findByIdAndUpdate(idBuyer, { '$addToSet': { 'salesHistory': newPurchase._id } }, {new: true});
+    await User.findByIdAndUpdate(idbuyer, { 
+      '$addToSet': { 'shoppingHistory': newPurchase._id }},
+    {new: true});
 
+    await Duvi.findByIdAndUpdate(idseller, { '$addToSet': { 'salesHistory': newPurchase._id } }, {new: true});
+
+    products.forEach(async (product) => {
+      const dbProduct = await Product.findById(product.idProduct, {stock: true});
+      const newStock = dbProduct.stock - product.quantity;
+
+      await Product.findByIdAndUpdate(product.idProduct, {stock: newStock});
+      await User.findByIdAndUpdate(idbuyer, { '$pull': { 'shoppingCart': product.idProduct } });
+    });
+
+    await newPaymentInvoice.save();
+    await newPurchase.save();
+
+    const oldSeller = await User.findOne({duvi: idseller}, {wallet: true});
+    await User.updateOne({duvi: idseller}, { 
+      wallet: { 
+          onProperty: oldSeller.wallet.onProperty,
+          onWait: oldSeller.wallet.onWait + totalPrice
+      }
+    });
+
+    res.status(200).send('Compra realizada con éxito');
   } catch (error) {
     res.status(500).send(error);
     console.log(error);
   }
 };
+
+PaymentsController.getPaymentInvoice = async (req, res) => {
+  try {
+    const invoice = await PaymentInvoice.findById(req.params.id).populate(['buyer', 'seller']);
+    return res.status(200).send(invoice);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+}
 
 module.exports = PaymentsController;
