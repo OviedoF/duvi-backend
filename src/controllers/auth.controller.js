@@ -82,7 +82,7 @@ authController.identifyUserJSW = async (req, res) => {
 
         const user = await User.findById(decoded.id, {
             password: false
-        });
+        }).populate('shoppingHistory');
 
         const rolesExist = await Role.find({_id: {$in: user.roles}}, {name: true});
 

@@ -27,10 +27,10 @@ const productSchema = new Schema({
         required: true
     },
     galeryImages: Array,
-    comments: {
+    comments: [{
         ref: "Comment",
         type: Schema.Types.ObjectId
-    },
+    }],
     duvi: {
         ref: "Duvi",
         type: Schema.Types.ObjectId

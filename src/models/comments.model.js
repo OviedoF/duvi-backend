@@ -9,7 +9,8 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
-    images: Array
+    commentedIn: Schema.Types.ObjectId,
+    stars: Number
 }, {
     timestamps: true
 });

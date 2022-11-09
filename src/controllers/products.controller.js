@@ -11,7 +11,8 @@ const productsControllers = {};
 
 productsControllers.getProducts = async (req, res) => {
     try {
-        const productsFinded = await Product.find();
+        const productsFinded = await Product.find().populate(['comments']);
+
         res.status(200).send(productsFinded);
     } catch (error) {
         console.log(error);
@@ -39,9 +40,9 @@ productsControllers.getProductsByCategory = async(req, res) => {
 productsControllers.getProductById = async(req, res) => {
     try {
         const {id} = req.params;
-        const product = await Product.findById(id).populate(['category', 'subcategories']);
+        const product = await Product.findById(id).populate(['category', 'subcategories', 'comments']);
 
-        // await Product.updateMany({name: 'p1'}, {stock: 8});
+        // await Product.updateMany({}, {comments: []});
 
         if(!product) res.status(404).send("Producto no encontrado");
 
