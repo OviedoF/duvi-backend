@@ -89,6 +89,17 @@ PaymentsController.paymentSuccess = async (req, res) => {
       };
     });
 
+    products.forEach(async (product) => {
+      const dbProduct = await Product.findById(product.idProduct, {stock: true});
+
+      if(dbProduct.stock <= 0) return res.status(401).send('Producto agotado.');
+
+      const newStock = dbProduct.stock - product.quantity;
+
+      await Product.findByIdAndUpdate(product.idProduct, {stock: newStock});
+      await User.findByIdAndUpdate(idbuyer, { '$pull': { 'shoppingCart': product.idProduct } });
+    });
+
     const newPaymentInvoice = new PaymentInvoice({seller: idseller, buyer: idbuyer, purchase: products});
 
     const newPurchase = new Purchase({
@@ -106,14 +117,6 @@ PaymentsController.paymentSuccess = async (req, res) => {
     {new: true});
 
     await Duvi.findByIdAndUpdate(idseller, { '$addToSet': { 'salesHistory': newPurchase._id } }, {new: true});
-
-    products.forEach(async (product) => {
-      const dbProduct = await Product.findById(product.idProduct, {stock: true});
-      const newStock = dbProduct.stock - product.quantity;
-
-      await Product.findByIdAndUpdate(product.idProduct, {stock: newStock});
-      await User.findByIdAndUpdate(idbuyer, { '$pull': { 'shoppingCart': product.idProduct } });
-    });
 
     await newPaymentInvoice.save();
     await newPurchase.save();

@@ -42,7 +42,7 @@ productsControllers.getProductById = async(req, res) => {
         const {id} = req.params;
         const product = await Product.findById(id).populate(['category', 'subcategories', 'comments']);
 
-        // await Product.updateMany({}, {comments: []});
+        // await Product.updateMany({}, {stock: 5});
 
         if(!product) res.status(404).send("Producto no encontrado");
 
@@ -50,6 +50,108 @@ productsControllers.getProductById = async(req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).send(error);
+    }
+}
+
+productsControllers.filterAndGetProducts = async (req, res) => {
+    try{
+        const products = await Product.find({}).populate(['duvi', 'comments', 'category']);
+        console.log(req.body);
+        const {stars, categories, prices, duvi, noStars} = req.body;
+        let productsFiltered = products;
+        let filteredByCategories = [];
+        let filteredByDuvi = [];
+        let filteredByPrice = [];
+        let filteredByStars = [];
+
+        if(stars && stars.length > 0) {
+
+            stars.forEach(star => {
+                 const aux = products.filter(product => {
+                    let totalStars = 0;
+                   
+                   product.comments.forEach(comment => totalStars += comment.stars);
+
+                   return (parseInt(totalStars / product.comments.length) === star);
+                })
+                
+                aux.forEach(el => filteredByStars.push(el));
+            });
+
+            productsFiltered = filteredByStars.map(productFilteredByStar => {
+                for (const product of productsFiltered) {
+                    if(product._id === productFilteredByStar._id) return product;
+                };
+            });
+
+            // console.log('---------FILTRO POR ESTRELLAS---------');
+            // filteredByStars.forEach(product => console.log(product._id));
+        } // FILTRO POR ESTRELLITAS--------
+
+        if(prices && (prices.maxPrice || prices.minPrice)) {
+
+            if(prices.maxPrice && prices.minPrice) {
+                filteredByPrice = products.filter(product => {
+                    if(prices.maxPrice && prices.minPrice) return (product.price >= prices.minPrice && product.price <= prices.maxPrice)
+                });
+            } // Si hay maximo y minimo filtramos los productos con el precio entre ellos.
+
+            if(prices.maxPrice && !prices.minPrice){
+                filteredByPrice = products.filter(product => (product.price <= prices.maxPrice));
+            } // Si nos pasan máximo pero no mínimo, filtraremos sólo los productos con precio menor al máximo.
+
+            if(prices.minPrice && !prices.maxPrice){
+                filteredByPrice = products.filter(product => (product.price >= prices.minPrice));
+            } // Si nos pasan mìnimo pero no máxnimo, filtraremos sólo los productos con precio mayor al mínimo.
+
+            productsFiltered = filteredByPrice.map(preoductFilteredByPrice => {
+                for (const product of productsFiltered) {
+                    if(product._id === preoductFilteredByPrice._id) return product;
+                }
+            })
+
+            // console.log('---------FILTRO POR PRECIO---------');
+            // filteredByPrice.forEach(el => productsFiltered(el));
+        } // FILTRO POR PRECIO--------
+
+        if(duvi && duvi.length > 0) {
+            filteredByDuvi = products.filter(product => product.duvi.name.toUpperCase() === duvi.toUpperCase());
+            // Filtramos los productos que en su tienda tenga el mismo nombre que nos pasaron.
+
+            productsFiltered = filteredByDuvi.map(productFilteredByDuvi => {
+                for (const product of productsFiltered) {
+                    if(product._id === productFilteredByDuvi._id) return product;
+                }
+            })
+        } // FILTRO POR TIENDA ----------------
+
+        if(categories && categories.length > 0){
+
+            categories.forEach(category => {
+                aux = products.filter(product => product.category.name.toUpperCase() === category.toUpperCase());
+                
+                aux.forEach(product => filteredByCategories.push(product) )
+            })
+            
+            productsFiltered = filteredByCategories.map(productFilteredByCategory => {
+                for (const product of productsFiltered) {
+                    if(product._id === productFilteredByCategory._id) return product;
+                }
+            });
+            // console.log('---------FILTRO POR CATEGORIES---------');
+            // filteredByCategories.forEach(el => productsFiltered(el));
+        } // FILTRAR OIR CATEGORÍA ------------
+
+        if(noStars){
+            productsFiltered = productsFiltered.filter(product => product.comments.length <= 0);
+        }
+
+        productsFiltered = productsFiltered.filter(el => el );
+        if(productsFiltered.length > 0)  productsFiltered.forEach(el => console.log(el.name));
+        return res.status(200).send(productsFiltered);
+    }catch(e) {
+        console.log(e);
+        res.status(500).send(e);
     }
 }
 

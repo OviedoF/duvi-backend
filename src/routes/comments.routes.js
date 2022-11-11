@@ -6,4 +6,6 @@ const commentsController = require(path.join(__dirname, '..', 'controllers', 'co
 router.get('/:id', commentsController.getComments);
 
 router.post('/create/product', commentsController.createProductComment);
+
+router.post('/create/duvi', commentsController.createDuviComment);
 module.exports = router;

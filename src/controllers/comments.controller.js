@@ -39,4 +39,27 @@ commentsController.createProductComment = async (req, res, next) => {
     }
 }
 
+commentsController.createDuviComment = async (req, res, next) => {
+    try {
+        const {author, comment, stars, commentedIn} = req.body;
+        console.log(req.body);
+
+        const newComment = new Comment({
+            author,
+            comment,
+            stars,
+            commentedIn
+        });
+
+        await Duvi.findByIdAndUpdate(commentedIn, { '$addToSet': { 'comments': newComment._id } }, {new: true});
+
+        await newComment.save();
+
+        res.status(201).send(newComment);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+}
+
 module.exports = commentsController;
