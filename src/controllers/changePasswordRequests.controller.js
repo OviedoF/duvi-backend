@@ -2,7 +2,7 @@ const path = require('path');
 require('dotenv').config();
 const {v4} = require('uuid');
 const ChangePasswordRequest = require(path.join(__dirname, '..', 'models', 'changePasswordRequest.model'));
-const User = require(path.join(__dirname, '..', 'models', 'user.model'));
+const User = require(path.join(__dirname, '..', 'models', 'User.model'));
 const nodemailer = require('nodemailer');
 
 const changePasswordController = {};

@@ -1,7 +1,7 @@
 const path = require('path');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const User = require(path.join(__dirname, '..', 'models', 'user.model'));
+const User = require(path.join(__dirname, '..', 'models', 'User.model'));
 const Role = require(path.join(__dirname, '..', 'models', 'role.model'));
 
 const authController = {};

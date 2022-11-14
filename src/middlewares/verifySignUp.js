@@ -1,6 +1,6 @@
 const path = require('path');
 
-const User = require(path.join(__dirname, '..', 'models', 'user.model'));
+const User = require(path.join(__dirname, '..', 'models', 'User.model'));
 const deleteImage = require(path.join(__dirname, '..', 'libs', 'dirLibrary'));
 
 const verifySignUp = {};

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const path = require('path');
 require('dotenv').config();
-const User = require(path.join(__dirname, '..', 'models', 'user.model'));
+const User = require(path.join(__dirname, '..', 'models', 'User.model'));
 const Role = require(path.join(__dirname, '..', 'models', 'role.model'));
 const deleteImage = require(path.join(__dirname, '..', 'libs', 'dirLibrary'))
 

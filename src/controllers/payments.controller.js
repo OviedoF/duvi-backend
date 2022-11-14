@@ -1,7 +1,7 @@
 require("dotenv").config();
 const path = require("path");
 const axios = require("axios");
-const User = require(path.join(__dirname, "..", "models", "user.model"));
+const User = require(path.join(__dirname, "..", "models", "User.model"));
 const Duvi = require(path.join(__dirname, "..", "models", "duvi.model"));
 const Product = require(path.join( __dirname, "..", "models", "product.model.js"));
 const Purchase = require(path.join( __dirname, "..", "models", "purchase.model.js" ));
