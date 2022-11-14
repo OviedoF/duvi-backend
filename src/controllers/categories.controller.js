@@ -12,6 +12,8 @@ categoriesControllers.getCategories = async (req, res) => {
     try {
         const categoriesFinded = await Category.find().populate('subCategories');
 
+        await Category.updateOne({name: 'Vestidos'}, {imageUrl: ''})
+
         res.status(200).send(categoriesFinded);
     } catch (error) {
         console.log(error);

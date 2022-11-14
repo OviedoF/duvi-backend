@@ -1,6 +1,6 @@
 const path = require('path');
-const User = require(path.join(__dirname, '..', 'models', 'user.model'))
-const Role = require(path.join(__dirname, '..', 'models', 'role.model'));;
+const User = require(path.join(__dirname, '..', 'models', 'user.model'));
+const Role = require(path.join(__dirname, '..', 'models', 'role.model'));
 require('dotenv').config();
 
 const createInitialAdmin = async () => {
