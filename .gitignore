@@ -1,3 +1,4 @@
 node_modules
 .env
 MPcontroller.js
+src/public/images
