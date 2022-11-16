@@ -3,6 +3,7 @@ require('dotenv').config();
 const User = require(path.join(__dirname, '..', 'models', 'User.model'));
 const Role = require(path.join(__dirname, '..', 'models', 'role.model'));
 const Duvi = require(path.join(__dirname, '..', 'models', 'duvi.model'));
+const Purchase = require(path.join(__dirname, '..', 'models', 'purchase.model'));
 const deleteImage = require(path.join(__dirname, '..', 'libs', 'dirLibrary'));
 
 const duviController = {};
@@ -23,7 +24,7 @@ duviController.getDuviById = async (req, res) => {
         const {id} = req.params;
         const duvi = await Duvi.findById(id).populate(['products', 'posts', 'comments']);
 
-        // await Duvi.updateMany({}, {comments: []});
+        // await Purchase.deleteMany({state: "En proceso"});
 
         if(!duvi) res.status(404).send("Tienda no encontrada.");
 
@@ -148,5 +149,18 @@ duviController.updateBannerPhoto = async (req, res) => {
         res.status(500).send(error);
     }
 };
+
+duviController.getNotifications = async (req, res) => {
+    try {
+        const {id} = req.params;
+        console.log(id);
+        const duvi = await Duvi.findById(id, {notifications: true});
+        console.log(duvi);
+        return res.status(200).send(duvi.notifications)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error)
+    }
+}
 
 module.exports = duviController;

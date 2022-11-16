@@ -5,8 +5,8 @@ const duviControllers = require(path.join(__dirname, '..', 'controllers', 'duvi.
 const {checkDuplicateDuvi} = require(path.join(__dirname, '..', 'middlewares', 'verifyMiddleware'));
 
 router.get('/', duviControllers.getDuvi);
-
 router.get('/:id', duviControllers.getDuviById);
+router.get('/:id/notifications', duviControllers.getNotifications);
 
 router.post('/', [
     checkDuplicateDuvi('name', 'Nombre de tienda ya utilizado, utilice otro.'),

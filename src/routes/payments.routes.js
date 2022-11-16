@@ -6,6 +6,7 @@ const PaymentsController = require(path.join(__dirname, '..', 'controllers', 'pa
 router.post('/', PaymentsController.getPaymentLink);
 
 router.post('/success', PaymentsController.paymentSuccess);
+router.post('/petition-local', PaymentsController.createPetitionOnLocal);
 
 router.get('/invoice/:id', PaymentsController.getPaymentInvoice);
 

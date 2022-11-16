@@ -13,6 +13,14 @@ app.use(cors({
     origin: '*'
 }));
 
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+//     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+//     next();
+// });
+
 // middlewares
 app.use(morgan('dev'));
 app.use(express.json());
@@ -36,5 +44,6 @@ app.use('/api/change-password', require(path.join(__dirname, 'routes', 'changePa
 app.use('/api/payments', require(path.join(__dirname, 'routes', 'payments.routes.js')));
 app.use('/api/history', require(path.join(__dirname, 'routes', 'history.routes.js')));
 app.use('/api/comments', require(path.join(__dirname, 'routes', 'comments.routes.js')));
+app.use('/api/shop', require(path.join(__dirname, 'routes', 'shopping.routes.js')));
 
 module.exports = app; 

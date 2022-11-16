@@ -61,7 +61,13 @@ const userSchema = new Schema({
     wallet: {
         onProperty: Number,
         onWait: Number
-    }
+    },
+
+    notifications: [{
+        subject: String,
+        message: String,
+        redirect: String
+    }]
 }, {
     timestamps: true
 });

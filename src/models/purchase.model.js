@@ -21,6 +21,7 @@ const purchaseSchema = new Schema({
   },
   images: [String],
   products: Array,
+  type: String
 }, {
     timestamps: true,
     timeseries: true

@@ -52,6 +52,11 @@ const duviSchema = new Schema({
     salesHistory: [{
         ref: "Purchase",
         type: Schema.Types.ObjectId
+    }],
+    notifications: [{
+        subject: String,
+        message: String,
+        redirect: String
     }]
 });
 

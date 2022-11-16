@@ -73,7 +73,6 @@ PaymentsController.paymentSuccess = async (req, res) => {
     - Quitar producto del carrito del comprador #
     - Quitar cantidad de stock al producto #
   */
-
   try {
     const { idbuyer, idseller } = req.headers;
     const { cart, totalPrice } = req.body;
@@ -135,6 +134,66 @@ PaymentsController.paymentSuccess = async (req, res) => {
     console.log(error);
   }
 };
+
+PaymentsController.createPetitionOnLocal = async (req, res) => {
+  try {
+    const { idbuyer, idseller } = req.headers;
+    const { cart } = req.body;
+    const images = cart.map((el) => el.principalImage);
+
+    const products = cart.map((el) => {
+      return {
+        name: el.name,
+        quantity: el.quantity,
+        price: el.price,
+        size: el.sizeSelected,
+        idProduct: el._id 
+      };
+    });
+
+    products.forEach(async (product) => {
+      const dbProduct = await Product.findById(product.idProduct, {stock: true});
+
+      if(dbProduct.stock <= 0) return res.status(401).send('Hay un producto agotado.');
+      await User.findByIdAndUpdate(idbuyer, { '$pull': { 'shoppingCart': product.idProduct } });
+    });
+
+    const newPaymentInvoice = new PaymentInvoice({seller: idseller, buyer: idbuyer, purchase: products});
+
+    const newPurchase = new Purchase({
+      state: "En proceso",
+      buyer: idbuyer,
+      seller: idseller,
+      products,
+      invoice: newPaymentInvoice._id,
+      images,
+      type: 'local-shipping'
+    });
+
+    await User.findByIdAndUpdate(
+      idbuyer, 
+      { '$addToSet': 
+        { 'shoppingHistory': newPurchase._id }
+      });
+
+    const notification = { 
+      subject: 'Nuevo pedido en local!', 
+      message: 'Tienes un nuevo pedido, por favor confirmale al usuario que tienes disponible.', 
+      redirect: `/duvi/${idseller}/local-purchase` 
+    };
+
+    await Duvi.findByIdAndUpdate(idseller, { '$addToSet': { 'notifications': notification}});
+    await Duvi.findByIdAndUpdate(idseller, { '$addToSet': { 'salesHistory': newPurchase._id}}, {new: true});
+
+    await newPaymentInvoice.save();
+    await newPurchase.save();
+
+    res.status(200).send('Compra realizada con éxito!');
+  } catch (error) {
+    res.status(500).send(error);
+    console.log(error);
+  }
+}
 
 PaymentsController.getPaymentInvoice = async (req, res) => {
   try {

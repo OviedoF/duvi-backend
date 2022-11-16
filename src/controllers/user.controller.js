@@ -15,7 +15,8 @@ userController.getUserById = async (req, res) => {
             roles: false
         });
         
-        // await User.updateMany({}, {shoppingHistory: []});
+        // await User.updateMany({}, {notifications: [], history: []});
+        // await Duvi.updateMany({}, {notifications: [], history: []});
 
         if(!userFinded) return res.status(404).send('No se ha podido encontrar el usuario.');
 
@@ -176,6 +177,17 @@ userController.getShoppingCart = async (req, res) => {
         console.log(e);
     }
 };
+
+userController.getNotifications = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const user = await User.findById(id, {notifications: true});
+        return res.status(200).send(user.notifications)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error)
+    }
+}
 
 
 module.exports = userController;

@@ -12,6 +12,7 @@ const { validatePassword, checkDuplicate } = require(path.join(
 router.get('/:id', userController.getUserById);
 router.get('/:id/follows', userController.getFollows);
 router.get('/:id/wishlist', userController.getWishList);
+router.get('/:id/notifications', userController.getNotifications);
 
 router.put('/:id',
 [
