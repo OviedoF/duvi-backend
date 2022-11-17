@@ -21,8 +21,6 @@ authController.signUp = async (req, res) => {
 
         const savedUser = await newUser.save();
 
-        console.log(savedUser);
-
         const token = jwt.sign({id: savedUser._id}, process.env.SECRET_JWT_USER, {
             expiresIn: 86400
         });
