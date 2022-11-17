@@ -9,9 +9,9 @@ const createInitialAdmin = require(path.join(__dirname, 'libs', 'initialAdmin'))
 // initialize
 require(path.join(__dirname, 'database.js'));
 const app = express();
-app.use(cors({
-    origin: '*'
-}));
+// app.use(cors({
+//     origin: '*'
+// }));
 
 // app.use((req, res, next) => {
 //     res.header('Access-Control-Allow-Origin', '*');
